@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas experiments</title>
+</head>
+<body>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            background-color: black;
+        }
+
+        canvas{
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+            background-color: white;
+        }
+    </style>
+
+    <canvas id="myCanvas" style="border:1px solid black;"></canvas>
+
+    <script>
+        const canvas = document.getElementById("myCanvas");
+        const gameName = "Game Name"
+        var canvasInside = canvas.getContext("2d");
+
+        function resize(){
+            canvas.width = (window.innerWidth - 30);
+            canvas.height = (window.innerHeight - 30);
+            canvasInside.font = "90px Tahoma"; 
+            canvasInside.fillText(gameName,(window.innerWidth/2 - (canvasInside.measureText(gameName).width/2)),window.innerHeight/2);
+        }
+
+        window.addEventListener("resize",resize);
+        resize();
+    </script>
+</body>
+</html>
