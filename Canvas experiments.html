@@ -11,6 +11,7 @@
             margin: 0;
             padding: 0;
             background-color: black;
+            font-family: Tahoma;
         }
 
         canvas{
@@ -20,24 +21,80 @@
             transform: translate(-50%,-50%);
             background-color: white;
         }
+        
+        #nameStuff{
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            left: 50%;
+            top: 58%;
+            transform: translate(-50%,-50%);
+        }
+
+        #errorText{
+            color: red;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            left: 50%;
+            top: 62%;
+            transform: translate(-50%,-50%);
+        }
+
+        @media only screen and (max-width:1280px){
+            #nameStuff{
+                top: 36%;
+            }
+        }
     </style>
 
     <canvas id="myCanvas" style="border:1px solid black;"></canvas>
 
+    <div id="nameStuff">
+        <h3>Username:</h3>
+        <input type="text" id="nameInput" style="height: 20px; margin-left: 10px; margin-right: 10px;">
+        <button id="submitName">Submit</button>
+    </div>
+    <div id="errorText"></div>
+
     <script>
         const canvas = document.getElementById("myCanvas");
-        const gameName = "Game Name"
+        const gameName = "Flappy clone"
         var canvasInside = canvas.getContext("2d");
 
-        function resize(){
+        function homeScreenResize(){
             canvas.width = (window.innerWidth - 30);
             canvas.height = (window.innerHeight - 30);
-            canvasInside.font = "90px Tahoma"; 
-            canvasInside.fillText(gameName,(window.innerWidth/2 - (canvasInside.measureText(gameName).width/2)),window.innerHeight/2);
+
+            if(window.innerWidth<600){
+                canvasInside.font = "50px Tahoma";
+                canvasInside.fillText(gameName,(window.innerWidth/2 - (canvasInside.measureText(gameName).width/2)),window.innerHeight/3.5);
+            }else if(window.innerWidth<1280){
+                canvasInside.font = "60px Tahoma"; 
+                canvasInside.fillText(gameName,(window.innerWidth/2 - (canvasInside.measureText(gameName).width/2)),window.innerHeight/3.5);
+            } else{
+                canvasInside.font = "90px Tahoma"; 
+                canvasInside.fillText(gameName,(window.innerWidth/2 - (canvasInside.measureText(gameName).width/2)),window.innerHeight/2);
+            }
+            
         }
 
-        window.addEventListener("resize",resize);
-        resize();
+        document.getElementById("submitName").addEventListener("click", () => {
+            const username = document.getElementById("nameInput").value;
+            const errorText = document.getElementById("errorText");
+            if(username.trim() === ""){
+                errorText.innerHTML = "empty username entered";
+            } else if(username.length < 3){
+                errorText.innerHTML = "username must be at least 3 characters long";
+            }else{
+                errorText.innerHTML = "";
+            }
+        });
+
+        window.addEventListener("resize",homeScreenResize);
+        homeScreenResize();
     </script>
 </body>
 </html>
