@@ -19,7 +19,7 @@
             left: 50%;
             top: 50%;
             transform: translate(-50%,-50%);
-            background-color: white;
+            background-color: lightblue;
         }
         
         #nameStuff{
@@ -47,15 +47,20 @@
             #nameStuff{
                 top: 36%;
             }
+
+            #errorText{
+                top: 42%;
+            }
         }
     </style>
 
     <canvas id="myCanvas" style="border:1px solid black;"></canvas>
 
+
     <div id="nameStuff">
         <h3>Username:</h3>
         <input type="text" id="nameInput" style="height: 20px; margin-left: 10px; margin-right: 10px;">
-        <button id="submitName">Submit</button>
+        <button id="submitName">Play</button>
     </div>
     <div id="errorText"></div>
 
@@ -63,26 +68,33 @@
         const canvas = document.getElementById("myCanvas");
         const gameName = "Flappy clone"
         var canvasInside = canvas.getContext("2d");
+        var menu = true;
+
+        var birdX = (window.innerWidth/2 - 25);
+        var birdY = window.innerHeight/2;
+        var birdG = 6;
 
         function homeScreenResize(){
             canvas.width = (window.innerWidth - 30);
             canvas.height = (window.innerHeight - 30);
 
-            if(window.innerWidth<600){
-                canvasInside.font = "50px Tahoma";
+            if(menu){
+                if(window.innerWidth<600){
+                    canvasInside.font = "50px Tahoma";
                 canvasInside.fillText(gameName,(window.innerWidth/2 - (canvasInside.measureText(gameName).width/2)),window.innerHeight/3.5);
-            }else if(window.innerWidth<1280){
-                canvasInside.font = "60px Tahoma"; 
-                canvasInside.fillText(gameName,(window.innerWidth/2 - (canvasInside.measureText(gameName).width/2)),window.innerHeight/3.5);
-            } else{
-                canvasInside.font = "90px Tahoma"; 
-                canvasInside.fillText(gameName,(window.innerWidth/2 - (canvasInside.measureText(gameName).width/2)),window.innerHeight/2);
-            }
-            
+                }else if(window.innerWidth<1280){
+                    canvasInside.font = "60px Tahoma"; 
+                    canvasInside.fillText(gameName,(window.innerWidth/2 - (canvasInside.measureText(gameName).width/2)),window.innerHeight/3.5);
+                } else{
+                    canvasInside.font = "90px Tahoma"; 
+                    canvasInside.fillText(gameName,(window.innerWidth/2 - (canvasInside.measureText(gameName).width/2)),window.innerHeight/2);
+                }
+            } 
         }
 
         document.getElementById("submitName").addEventListener("click", () => {
             const username = document.getElementById("nameInput").value;
+            const nameStuff = document.getElementById("nameStuff");
             const errorText = document.getElementById("errorText");
             if(username.trim() === ""){
                 errorText.innerHTML = "empty username entered";
@@ -90,8 +102,32 @@
                 errorText.innerHTML = "username must be at least 3 characters long";
             }else{
                 errorText.innerHTML = "";
+                menu = false;
+                nameStuff.style.display = "none";
+                homeScreenResize();
+                actualGame();
             }
         });
+
+        function actualGame(){
+            canvasInside.clearRect(0,0,canvas.width,canvas.height);
+            birdY+=birdG;
+            canvasInside.fillStyle = "yellow";
+            canvasInside.fillRect(birdX,birdY,50,50);
+            if(birdY<window.innerHeight-70){
+                requestAnimationFrame(actualGame);
+            } else{
+                alert("dead");
+            }
+        }
+
+        document.addEventListener("keyup", event => {
+            if(event.code === "Space"){
+                for(var i=0; i<200; i++){
+                    birdY-=1;
+                }
+            }
+        })
 
         window.addEventListener("resize",homeScreenResize);
         homeScreenResize();
